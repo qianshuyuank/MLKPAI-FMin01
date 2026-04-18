@@ -1,0 +1,5 @@
+HDMI 共8根GPIO/4对差分对，做pin pair全部等长；误差正负0.127MM；Len=38.4718MM
+
+DVP    共20根GPIO/10对差分对，做pin pair全部等长；误差正负0.127MM；Len=20.1094MM
+
+TF       共6根GPIO，做pin pair全部等长；误差正负0.127MM；Len=14.6431MM

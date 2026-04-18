@@ -1,0 +1,25 @@
+
+set_pin_assignment	{ I_sys_clk	    }	{ LOCATION = P34; IOSTANDARD = LVCMOS33; }
+set_pin_assignment	{ I_sys_rstn 	}	{ LOCATION = P31; IOSTANDARD = LVCMOS33; }
+set_pin_assignment	{ O_led1 		}	{ LOCATION = P14; IOSTANDARD = LVCMOS33; }
+set_pin_assignment	{ O_led2 		}	{ LOCATION = P3;  IOSTANDARD = LVCMOS33; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

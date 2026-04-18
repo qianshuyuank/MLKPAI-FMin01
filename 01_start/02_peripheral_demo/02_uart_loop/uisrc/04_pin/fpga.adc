@@ -1,0 +1,5 @@
+
+set_pin_assignment	{ I_sysclk     }	{ LOCATION = P34; IOSTANDARD = LVCMOS33;}
+
+set_pin_assignment	{ I_uart_rx    }	{ LOCATION = P16; IOSTANDARD = LVCMOS33; }
+set_pin_assignment	{ O_uart_tx    }	{ LOCATION = P17; IOSTANDARD = LVCMOS33; }

@@ -1,0 +1,38 @@
+
+#sysclk
+set_pin_assignment	{ I_sysclk       }	{ LOCATION = P34; }
+#cammera
+set_pin_assignment	{ I_cmos_data[0] }	{ LOCATION = P33; IOSTANDARD = LVCMOS33; }
+set_pin_assignment	{ I_cmos_data[1] }	{ LOCATION = P32; IOSTANDARD = LVCMOS33; }
+set_pin_assignment	{ I_cmos_data[2] }	{ LOCATION = P28; IOSTANDARD = LVCMOS33; }
+set_pin_assignment	{ I_cmos_data[3] }	{ LOCATION = P29; IOSTANDARD = LVCMOS33; }
+set_pin_assignment	{ I_cmos_data[4] }	{ LOCATION = P12; IOSTANDARD = LVCMOS33; }
+set_pin_assignment	{ I_cmos_data[5] }	{ LOCATION = P70; IOSTANDARD = LVCMOS33; }
+set_pin_assignment	{ I_cmos_data[6] }	{ LOCATION = P13; IOSTANDARD = LVCMOS33; }
+set_pin_assignment	{ I_cmos_data[7] }	{ LOCATION = P63; IOSTANDARD = LVCMOS33; }
+set_pin_assignment	{ I_cmos_href 	 }	{ LOCATION = P71; IOSTANDARD = LVCMOS33; }
+set_pin_assignment	{ I_cmos_vsync 	 }	{ LOCATION = P64; IOSTANDARD = LVCMOS33; }
+set_pin_assignment	{ I_cmos_pclk 	 }	{ LOCATION = P11; IOSTANDARD = LVCMOS33; }
+set_pin_assignment	{ O_cmos_xclk    }	{ LOCATION = P10; IOSTANDARD = LVCMOS33; }
+
+set_pin_assignment	{ IO_cmos_sda    }	{ LOCATION = P38; IOSTANDARD = LVCMOS33; PULLTYPE = PULLUP; }
+set_pin_assignment	{ O_cmos_scl     }	{ LOCATION = P40; IOSTANDARD = LVCMOS33; PULLTYPE = PULLUP; }
+#HDMI TX
+set_pin_assignment	{ O_HDMI_CLK_P }	{ LOCATION = P55; IOSTANDARD = LVDS33_E; DRIVESTRENGTH = 8; PULLTYPE = NONE; }
+set_pin_assignment	{ O_HDMI_TX_P[0] }	{ LOCATION = P47; IOSTANDARD = LVDS33_E; DRIVESTRENGTH = 8; PULLTYPE = NONE; }
+set_pin_assignment	{ O_HDMI_TX_P[1] }	{ LOCATION = P49; IOSTANDARD = LVDS33_E; DRIVESTRENGTH = 8; PULLTYPE = NONE; }
+set_pin_assignment	{ O_HDMI_TX_P[2] }	{ LOCATION = P61; IOSTANDARD = LVDS33_E; DRIVESTRENGTH = 8; PULLTYPE = NONE; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

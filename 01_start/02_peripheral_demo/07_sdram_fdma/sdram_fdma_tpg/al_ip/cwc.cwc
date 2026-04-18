@@ -1,0 +1,108 @@
+<chipwatcher project_name="fpga_prj" bit_file="fpga_prj_Runs/phy_1/fpga_prj.bit" bid_file="fpga_prj_Runs/phy_1/fpga_prj_inst.bid" chip_name="EG4S20NG88">
+<!-- HMAC is: 6898809f868d16b48189edd0ef28fd78ece5db518789f131f5fb52af7b0a3cb5 -->
+	<instance name="auto_chipwatcher_0" id="0" enabled="yes">
+		<clock clk_name="pclkx1" polarity="posedge"/>
+		<config bram_name="auto_chipwatcher_0_logicbram" sample_depth="4096"/>
+		<signal_vec>
+			<data_nets>
+				<net name="R_rden_i"/>
+				<net name="o_gray[0]"/>
+				<net name="o_gray[10]"/>
+				<net name="o_gray[11]"/>
+				<net name="o_gray[12]"/>
+				<net name="o_gray[13]"/>
+				<net name="o_gray[14]"/>
+				<net name="o_gray[15]"/>
+				<net name="o_gray[16]"/>
+				<net name="o_gray[17]"/>
+				<net name="o_gray[18]"/>
+				<net name="o_gray[19]"/>
+				<net name="o_gray[1]"/>
+				<net name="o_gray[20]"/>
+				<net name="o_gray[21]"/>
+				<net name="o_gray[22]"/>
+				<net name="o_gray[23]"/>
+				<net name="o_gray[2]"/>
+				<net name="o_gray[3]"/>
+				<net name="o_gray[4]"/>
+				<net name="o_gray[5]"/>
+				<net name="o_gray[6]"/>
+				<net name="o_gray[7]"/>
+				<net name="o_gray[8]"/>
+				<net name="o_gray[9]"/>
+				<net name="uidbuf_inst/R_data_o[0]"/>
+				<net name="uidbuf_inst/R_data_o[10]"/>
+				<net name="uidbuf_inst/R_data_o[11]"/>
+				<net name="uidbuf_inst/R_data_o[12]"/>
+				<net name="uidbuf_inst/R_data_o[13]"/>
+				<net name="uidbuf_inst/R_data_o[14]"/>
+				<net name="uidbuf_inst/R_data_o[15]"/>
+				<net name="uidbuf_inst/R_data_o[1]"/>
+				<net name="uidbuf_inst/R_data_o[2]"/>
+				<net name="uidbuf_inst/R_data_o[3]"/>
+				<net name="uidbuf_inst/R_data_o[4]"/>
+				<net name="uidbuf_inst/R_data_o[5]"/>
+				<net name="uidbuf_inst/R_data_o[6]"/>
+				<net name="uidbuf_inst/R_data_o[7]"/>
+				<net name="uidbuf_inst/R_data_o[8]"/>
+				<net name="uidbuf_inst/R_data_o[9]"/>
+				<net name="uidbuf_inst/rvalid"/>
+			</data_nets>
+			<watcher_nodes>
+				<net name="R_rden_i" op="equal" type="reg" trigger="enable"/>
+				<bus name="o_gray" radix="bin" state="collapse" op="dont_care" type="comb">
+					<net name="o_gray[23]" type="reg" trigger="enable"/>
+					<net name="o_gray[22]" type="reg" trigger="enable"/>
+					<net name="o_gray[21]" type="reg" trigger="enable"/>
+					<net name="o_gray[20]" type="reg" trigger="enable"/>
+					<net name="o_gray[19]" type="reg" trigger="enable"/>
+					<net name="o_gray[18]" type="comb" trigger="enable"/>
+					<net name="o_gray[17]" type="comb" trigger="enable"/>
+					<net name="o_gray[16]" type="comb" trigger="enable"/>
+					<net name="o_gray[15]" type="reg" trigger="enable"/>
+					<net name="o_gray[14]" type="reg" trigger="enable"/>
+					<net name="o_gray[13]" type="reg" trigger="enable"/>
+					<net name="o_gray[12]" type="reg" trigger="enable"/>
+					<net name="o_gray[11]" type="reg" trigger="enable"/>
+					<net name="o_gray[10]" type="reg" trigger="enable"/>
+					<net name="o_gray[9]" type="comb" trigger="enable"/>
+					<net name="o_gray[8]" type="comb" trigger="enable"/>
+					<net name="o_gray[7]" type="reg" trigger="enable"/>
+					<net name="o_gray[6]" type="reg" trigger="enable"/>
+					<net name="o_gray[5]" type="reg" trigger="enable"/>
+					<net name="o_gray[4]" type="reg" trigger="enable"/>
+					<net name="o_gray[3]" type="reg" trigger="enable"/>
+					<net name="o_gray[2]" type="comb" trigger="enable"/>
+					<net name="o_gray[1]" type="comb" trigger="enable"/>
+					<net name="o_gray[0]" type="comb" trigger="enable"/>
+				</bus>
+				<bus name="uidbuf_inst/R_data_o" radix="bin" state="collapse" op="dont_care" type="reg">
+					<net name="uidbuf_inst/R_data_o[15]" type="reg" trigger="enable"/>
+					<net name="uidbuf_inst/R_data_o[14]" type="reg" trigger="enable"/>
+					<net name="uidbuf_inst/R_data_o[13]" type="reg" trigger="enable"/>
+					<net name="uidbuf_inst/R_data_o[12]" type="reg" trigger="enable"/>
+					<net name="uidbuf_inst/R_data_o[11]" type="reg" trigger="enable"/>
+					<net name="uidbuf_inst/R_data_o[10]" type="reg" trigger="enable"/>
+					<net name="uidbuf_inst/R_data_o[9]" type="reg" trigger="enable"/>
+					<net name="uidbuf_inst/R_data_o[8]" type="reg" trigger="enable"/>
+					<net name="uidbuf_inst/R_data_o[7]" type="reg" trigger="enable"/>
+					<net name="uidbuf_inst/R_data_o[6]" type="reg" trigger="enable"/>
+					<net name="uidbuf_inst/R_data_o[5]" type="reg" trigger="enable"/>
+					<net name="uidbuf_inst/R_data_o[4]" type="reg" trigger="enable"/>
+					<net name="uidbuf_inst/R_data_o[3]" type="reg" trigger="enable"/>
+					<net name="uidbuf_inst/R_data_o[2]" type="reg" trigger="enable"/>
+					<net name="uidbuf_inst/R_data_o[1]" type="reg" trigger="enable"/>
+					<net name="uidbuf_inst/R_data_o[0]" type="reg" trigger="enable"/>
+				</bus>
+				<net name="uidbuf_inst/rvalid" op="equal" type="comb" trigger="enable"/>
+			</watcher_nodes>
+		</signal_vec>
+		<trigger name="auto_chipwatcher_0_trigger" position="pre">
+			<condition level="1" enabled="yes" type="basic_and">
+				R_rden_i == any && o_gray[0] == low && o_gray[10] == low && o_gray[11] == low && o_gray[12] == low && o_gray[13] == low && o_gray[14] == low && o_gray[15] == low && o_gray[16] == low && o_gray[17] == low && o_gray[18] == low && o_gray[19] == low && o_gray[1] == low && o_gray[20] == low && o_gray[21] == low && o_gray[22] == low && o_gray[23] == low && o_gray[2] == low && o_gray[3] == low && o_gray[4] == low && o_gray[5] == low && o_gray[6] == low && o_gray[7] == low && o_gray[8] == low && o_gray[9] == low && uidbuf_inst/R_data_o[0] == low && uidbuf_inst/R_data_o[10] == low && uidbuf_inst/R_data_o[11] == low && uidbuf_inst/R_data_o[12] == low && uidbuf_inst/R_data_o[13] == low && uidbuf_inst/R_data_o[14] == low && uidbuf_inst/R_data_o[15] == low && uidbuf_inst/R_data_o[1] == low && uidbuf_inst/R_data_o[2] == low && uidbuf_inst/R_data_o[3] == low && uidbuf_inst/R_data_o[4] == low && uidbuf_inst/R_data_o[5] == low && uidbuf_inst/R_data_o[6] == low && uidbuf_inst/R_data_o[7] == low && uidbuf_inst/R_data_o[8] == low && uidbuf_inst/R_data_o[9] == low && uidbuf_inst/rvalid == any
+			</condition>
+			<log>
+			</log>
+		</trigger>
+	</instance>
+</chipwatcher>

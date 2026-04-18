@@ -1,0 +1,64 @@
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Mac OS X
+.DS_Store
+
+# IDEs and Editors
+.vscode/
+.idea/
+
+# ===== FPGA Build Artifacts =====
+# Bitstream and programming files
+*.bit
+*.mcs
+*.prm
+*.rbf
+
+# Binary compiled files
+*.bin
+
+# Synthesis / Implementation reports & logs
+*.log
+*.logw
+*.rpt
+*.jou
+*.timing
+*.area
+*.back
+*.bid
+*.tsm
+
+# Simulation compiled files
+*.qdb
+*.qpg
+*.qtl
+*.wlf
+*.pb
+*.str
+
+# Encrypted / intermediate
+*.vPreview
+*.db
+
+# ===== FPGA Tool Generated Directories =====
+# Tang Dynasty (TD) run directories
+*_Runs/
+.logs/
+
+# ModelSim / QuestaSim simulation work library
+work/
+
+# Xilinx / other tool generated cache
+.cache/
+.hw/
+.ip_user_files/
+IncrementalCompile/
+Simulation/

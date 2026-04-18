@@ -1,0 +1,189 @@
+
+/*******************************MILIANKE*******************************
+*Company : MiLianKe Electronic Technology Co., Ltd.
+*WebSite:https://www.milianke.com
+*TechWeb:https://www.uisrc.com
+*tmall-shop:https://milianke.tmall.com
+*jd-shop:https://milianke.jd.com
+*taobao-shop1: https://milianke.taobao.com
+*Create Date: 2019/12/17
+*Module Name:
+*File Name:
+*Description: 
+*The reference demo provided by Milianke is only used for learning. 
+*We cannot ensure that the demo itself is free of bugs, so users 
+*should be responsible for the technical problems and consequences
+*caused by the use of their own products.
+*Copyright: Copyright (c) MiLianKe
+*All rights reserved.
+*Revision: 1.0
+*Signal description
+*1) _i input
+*2) _o output
+*3) _n activ low
+*4) _dg debug signal 
+*5) _r delay or register
+*6) _s state mechine
+*********************************************************************/
+`timescale 1ns / 1ns
+
+module uitpg
+(
+
+input           I_tpg_clk, //系统时钟
+input           I_tpg_vs,  //场同步输入
+input           I_tpg_hs,  //行同步输入
+input           I_tpg_de,  //视频数据有效输入   
+output          O_tpg_vs,  //场同步输出
+output          O_tpg_hs,  //行同步输出
+output          O_tpg_de,  //视频数据有效输出    
+output [23:0]   O_tpg_data //有效测试数据
+);
+
+reg[8:0] fcnt = 9'd0;
+reg tpg_vs_r = 1'b0;
+reg tpg_hs_r = 1'b0;
+
+always @(posedge I_tpg_clk)begin
+    tpg_vs_r <= I_tpg_vs;//对vs信号寄存一次
+    tpg_hs_r <= I_tpg_hs;//对hs信号寄存一次
+end
+
+reg [11:0]v_cnt = 12'd0; //视频垂直方向，行计数器
+reg [11:0]h_cnt = 12'd0; //视频水平方向，列计数器
+
+//v_cnt计数器模块
+always @(posedge I_tpg_clk)
+  if(I_tpg_vs) //通过vs产生同步复位
+	v_cnt <= 12'd0; //重置v_cnt=0
+  else if((!tpg_hs_r)&&I_tpg_hs) 
+  //hs信号的上升沿，v_cnt计数，这种方式可以不管hs有效是高电平还是低电平的情况,v_cnt 视频垂直方向，行计数器，计数行数量
+	v_cnt <= v_cnt + 1'b1; 
+
+//h_cnt计数器模块	
+//计数行有效像素,当de无效，重置 h_cnt=0
+always @(posedge I_tpg_clk)
+  if(I_tpg_de)
+	h_cnt <= h_cnt + 1'b1; 
+  else 
+    h_cnt <= 12'd0; 
+      
+reg [7:0] grid_data = 8'd0;
+
+//grid_data发生器  
+always @(posedge I_tpg_clk)begin
+	if((v_cnt[4]==1'b1) ^ (h_cnt[4]==1'b1))
+	//方格大小16*16，黑白交替
+	   grid_data <= 8'h00;
+	else
+	   grid_data <= 8'hff;
+end
+
+reg[23:0]color_bar = 24'd0;
+
+//RGB彩条发生器
+always @(posedge I_tpg_clk)
+begin
+	if(h_cnt==80)
+	color_bar	<=	24'hff0000;//红
+	else if(h_cnt==160)
+	color_bar	<=	24'h00ff00;//绿
+	else if(h_cnt==240)
+	color_bar	<=	24'h0000ff;//蓝
+	else if(h_cnt==320)
+	color_bar	<=	24'hff00ff;//紫
+	else if(h_cnt==400)
+	color_bar	<=	24'hffff00;//黄
+	else if(h_cnt==480)
+	color_bar	<=	24'h00ffff;//青蓝
+	else if(h_cnt==560)
+	color_bar	<=	24'hffffff;//白
+	else if(h_cnt==640)
+	color_bar	<=	24'h000000;//黑
+	else
+	color_bar	<=	color_bar;
+end
+
+reg[10:0]dis_mode = 10'd0;
+
+//显示模式切换
+always @(posedge I_tpg_clk)
+    if((!tpg_vs_r)&&I_tpg_vs) dis_mode <= dis_mode + 1'b1;
+
+reg[7:0]  r_reg = 8'd0;
+reg[7:0]  g_reg = 8'd0;
+reg[7:0]  b_reg = 8'd0;
+
+//测试图形输出
+always @(posedge I_tpg_clk)
+begin
+    case(dis_mode[10:7])//截取高位，控制切换显示速度
+        4'd0:begin
+			r_reg <= 0; 
+			b_reg <= 0;
+			g_reg <= 0;
+		end
+        4'd1:begin
+			r_reg <= 8'b11111111;               //白
+            g_reg <= 8'b11111111;
+            b_reg <= 8'b11111111;
+		end
+        4'd2,4'd3:begin  //连续两个状态输出相同图形
+			r_reg <= 8'b11111111;              //红
+            g_reg <= 0;
+            b_reg <= 0;  
+		end			  
+        4'd4,4'd5:begin  //连续两个状态输出相同图形
+			r_reg <= 0;                         //绿
+            g_reg <= 8'b11111111;
+            b_reg <= 0; 
+		end					  
+        4'd6:begin     
+			r_reg <= 0;                         //蓝
+            g_reg <= 0;
+            b_reg <= 8'b11111111;
+		end
+        4'd7,4'd8:begin  //连续两个状态输出相同图形
+			r_reg <= grid_data;                 //方格
+            g_reg <= grid_data;
+            b_reg <= grid_data;
+		end					  
+        4'd9:begin    
+			r_reg <= h_cnt[7:0];                //水平渐变
+            g_reg <= h_cnt[7:0];
+            b_reg <= h_cnt[7:0];
+		end
+        4'd10,4'd11:begin   //连续两个状态输出相同图形  
+			r_reg <= v_cnt[7:0];                 //垂直渐变
+            g_reg <= v_cnt[7:0];
+            b_reg <= v_cnt[7:0];
+		end
+        4'd12:begin     
+			r_reg <= v_cnt[7:0];                 //红垂直渐变
+            g_reg <= 0;
+            b_reg <= 0;
+		end
+        4'd13:begin     
+			r_reg <= 0;                          //绿垂直渐变
+            g_reg <= h_cnt[7:0];
+            b_reg <= 0;
+		end
+        4'd14:begin     
+			r_reg <= 0;                          //蓝垂直渐变
+            g_reg <= 0;
+            b_reg <= h_cnt[7:0];			
+		end
+        4'd15:begin     
+			r_reg <= color_bar[23:16];           //彩条
+            g_reg <= color_bar[15:8];
+            b_reg <= color_bar[7:0];			
+		end				  
+        endcase
+end
+
+assign O_tpg_data = {r_reg,g_reg,b_reg};//测试图形RGB数据输出
+assign O_tpg_vs = I_tpg_vs;  //VS同步信号
+assign O_tpg_hs = I_tpg_hs;  //HS同步信号
+assign O_tpg_de = I_tpg_de;  //DE数据有效信号
+
+endmodule

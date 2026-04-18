@@ -1,0 +1,12 @@
+set_pin_assignment	{ O_LED[0] 	}	{ LOCATION = P14; IOSTANDARD = LVCMOS33; }
+set_pin_assignment	{ O_LED[1] 	}	{ LOCATION = P3;  IOSTANDARD = LVCMOS33; }
+set_pin_assignment	{ O_LED[2] 	}	{ LOCATION = P2;  IOSTANDARD = LVCMOS33; }
+set_pin_assignment	{ O_LED[3] 	}	{ LOCATION = P51; IOSTANDARD = LVCMOS33; }
+set_pin_assignment	{ O_LED[4] 	}	{ LOCATION = P52; IOSTANDARD = LVCMOS33; }
+set_pin_assignment	{ O_LED[5] 	}	{ LOCATION = P57; IOSTANDARD = LVCMOS33; }
+set_pin_assignment	{ O_LED[6] 	}	{ LOCATION = P59; IOSTANDARD = LVCMOS33; }
+set_pin_assignment	{ O_LED[7] 	}	{ LOCATION = P62; IOSTANDARD = LVCMOS33; }
+
+
+set_pin_assignment	{ I_rstn    }	{ LOCATION = P31;  IOSTANDARD = LVCMOS33; }
+set_pin_assignment	{ I_sysclk  }	{ LOCATION = P34;  IOSTANDARD = LVCMOS33; }

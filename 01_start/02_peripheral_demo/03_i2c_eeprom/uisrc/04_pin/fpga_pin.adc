@@ -1,0 +1,12 @@
+set_pin_assignment	{ I_sysclk 		}  		{ LOCATION = P34; IOSTANDARD  = LVCMOS33;}
+set_pin_assignment	{ O_iic_scl  		}	{ LOCATION = P42; IOSTANDARD = LVCMOS33;}
+set_pin_assignment	{ IO_iic_sda  	   	}	{ LOCATION = P39; IOSTANDARD = LVCMOS33;}
+set_pin_assignment	{ O_test_led[0]  	}	{ LOCATION = P14; IOSTANDARD = LVCMOS33;}
+set_pin_assignment	{ O_test_led[1]  	}	{ LOCATION = P3;  IOSTANDARD = LVCMOS33;}
+set_pin_assignment	{ O_test_led[2]  	}	{ LOCATION = P2;  IOSTANDARD = LVCMOS33;}
+
+set_pin_assignment	{ O_error_led       }	{ LOCATION = P51; IOSTANDARD = LVCMOS33;}
+
+
+
+
