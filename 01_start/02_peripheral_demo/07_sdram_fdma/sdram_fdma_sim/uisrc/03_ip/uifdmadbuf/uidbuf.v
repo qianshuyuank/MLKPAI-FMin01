@@ -27,59 +27,59 @@
 *********************************************************************/
 
 module uidbuf#(
-parameter  integer                   APP_DATA_WIDTH = 32,	//SDRAM数据位宽
-parameter  integer                   APP_ADDR_WIDTH = 21,	//SDRAM地址位宽
+parameter  integer                   APP_DATA_WIDTH = 32,	//SDRAM鏁版嵁浣嶅
+parameter  integer                   APP_ADDR_WIDTH = 21,	//SDRAM鍦板潃浣嶅
 
-parameter  integer                   W_BUFDEPTH     = 2048,	//写通道AXI设置FIFO缓存大小
-parameter  integer                   W_DATAWIDTH    = 16,	//写通道AXI设置数据位宽大小
-parameter  [APP_ADDR_WIDTH -1'b1: 0] W_BASEADDR     = 0,	//写通道设置内存起始地址
-parameter  integer                   W_XSIZE        = 640, //写通道设置X方向的数据大小，代表了每次FDMA 传输的数据长度
-parameter  integer                   W_YSIZE        = 480, //写通道设置Y方向值，代表了进行了多少次XSIZE传输
-parameter  integer                   W_BUFSIZE      = 3,	//写通道设置帧缓存大小，目前最大支持8帧，修改分辨率参数,需注意fdma_wbufn位宽
+parameter  integer                   W_BUFDEPTH     = 2048,	//鍐欓€氶亾AXI璁剧疆FIFO缂撳瓨澶у皬
+parameter  integer                   W_DATAWIDTH    = 16,	//鍐欓€氶亾AXI璁剧疆鏁版嵁浣嶅澶у皬
+parameter  [APP_ADDR_WIDTH -1'b1: 0] W_BASEADDR     = 0,	//鍐欓€氶亾璁剧疆鍐呭瓨璧峰鍦板潃
+parameter  integer                   W_XSIZE        = 640, //鍐欓€氶亾璁剧疆X鏂瑰悜鐨勬暟鎹ぇ灏忥紝浠ｈ〃浜嗘瘡娆DMA 浼犺緭鐨勬暟鎹暱搴?
+parameter  integer                   W_YSIZE        = 480, //鍐欓€氶亾璁剧疆Y鏂瑰悜鍊硷紝浠ｈ〃浜嗚繘琛屼簡澶氬皯娆SIZE浼犺緭
+parameter  integer                   W_BUFSIZE      = 3,	//鍐欓€氶亾璁剧疆甯х紦瀛樺ぇ灏忥紝鐩墠鏈€澶ф敮鎸?甯э紝淇敼鍒嗚鲸鐜囧弬鏁?闇€娉ㄦ剰fdma_wbufn浣嶅
 
-parameter  integer                   R_BUFDEPTH     = 2048,	//读通道AXI设置FIFO缓存大小
-parameter  integer                   R_DATAWIDTH    = 16,   //读通道AXI设置数据位宽大小
-parameter  [APP_ADDR_WIDTH -1'b1: 0] R_BASEADDR     = 0,    //读通道设置内存起始地址
-parameter  integer                   R_XSIZE        = 640, //读通道设置X方向的数据大小，代表了每次FDMA 传输的数据长度
-parameter  integer                   R_YSIZE        = 480, //读通道设置Y方向值，代表了进行了多少次XSIZE传输
-parameter  integer                   R_BUFSIZE      = 3     //读通道设置帧缓存大小，目前最大支持8帧，修改分辨率参数,需注意fdma_rbufn位宽
+parameter  integer                   R_BUFDEPTH     = 2048,	//璇婚€氶亾AXI璁剧疆FIFO缂撳瓨澶у皬
+parameter  integer                   R_DATAWIDTH    = 16,   //璇婚€氶亾AXI璁剧疆鏁版嵁浣嶅澶у皬
+parameter  [APP_ADDR_WIDTH -1'b1: 0] R_BASEADDR     = 0,    //璇婚€氶亾璁剧疆鍐呭瓨璧峰鍦板潃
+parameter  integer                   R_XSIZE        = 640, //璇婚€氶亾璁剧疆X鏂瑰悜鐨勬暟鎹ぇ灏忥紝浠ｈ〃浜嗘瘡娆DMA 浼犺緭鐨勬暟鎹暱搴?
+parameter  integer                   R_YSIZE        = 480, //璇婚€氶亾璁剧疆Y鏂瑰悜鍊硷紝浠ｈ〃浜嗚繘琛屼簡澶氬皯娆SIZE浼犺緭
+parameter  integer                   R_BUFSIZE      = 3     //璇婚€氶亾璁剧疆甯х紦瀛樺ぇ灏忥紝鐩墠鏈€澶ф敮鎸?甯э紝淇敼鍒嗚鲸鐜囧弬鏁?闇€娉ㄦ剰fdma_rbufn浣嶅
 
 )
 (
-input wire                                  I_ui_clk,		//SDRAM读写时钟
-input wire                                  I_ui_rstn,	//SDRAM复位信号
+input wire                                  I_ui_clk,		//SDRAM璇诲啓鏃堕挓
+input wire                                  I_ui_rstn,	//SDRAM澶嶄綅淇″彿
 input wire                                  I_sdr_busy,
 //----------sensor input -W_FIFO--------------
-input wire                                  I_W_wclk,	//写FIFO的写时钟
-input wire                                  I_W_FS,		//帧同步信号
-input wire                                  I_W_wren,	//写FIFO的写使能
-input wire     [W_DATAWIDTH-1'b1 : 0]       I_W_data,	//写FIFO的写数据
+input wire                                  I_W_wclk,	//鍐橣IFO鐨勫啓鏃堕挓
+input wire                                  I_W_FS,		//甯у悓姝ヤ俊鍙?
+input wire                                  I_W_wren,	//鍐橣IFO鐨勫啓浣胯兘
+input wire     [W_DATAWIDTH-1'b1 : 0]       I_W_data,	//鍐橣IFO鐨勫啓鏁版嵁
 //----------fdma signals write-------       
-output wire    [APP_ADDR_WIDTH-1'b1: 0]     O_fdma_waddr,	//FDMA写通道地址
-output wire                                 O_fdma_wareq,	//FDMA写通道请求
-output wire    [15  :0]                     O_fdma_wsize, //FDMA写通道一次FDMA的传输大小                                    
-input  wire                                 I_fdma_wbusy,	//FDMA处于BUSY状态，SDRAM正在写操作	
-output wire    [APP_DATA_WIDTH-1'b1:0]      O_fdma_wdata,	//FDMA写数据
-input  wire                                 I_fdma_wvalid,//FDMA 写有效
-output wire                                 O_fdma_wready,//FDMA写准备好，用户可以写数据	
+output wire    [APP_ADDR_WIDTH-1'b1: 0]     O_fdma_waddr,	//FDMA鍐欓€氶亾鍦板潃
+output wire                                 O_fdma_wareq,	//FDMA鍐欓€氶亾璇锋眰
+output wire    [15  :0]                     O_fdma_wsize, //FDMA鍐欓€氶亾涓€娆DMA鐨勪紶杈撳ぇ灏?                                   
+input  wire                                 I_fdma_wbusy,	//FDMA澶勪簬BUSY鐘舵€侊紝SDRAM姝ｅ湪鍐欐搷浣?
+output wire    [APP_DATA_WIDTH-1'b1:0]      O_fdma_wdata,	//FDMA鍐欐暟鎹?
+input  wire                                 I_fdma_wvalid,//FDMA 鍐欐湁鏁?
+output wire                                 O_fdma_wready,//FDMA鍐欏噯澶囧ソ锛岀敤鎴峰彲浠ュ啓鏁版嵁	
 //----------sensor input -W_FIFO--------------
-input  wire                                 I_R_rclk,	//写FIFO的写时钟
-input  wire                                 I_R_FS,     //帧同步信号
-input  wire                                 I_R_rden,   //写FIFO的写使能
-output wire    [R_DATAWIDTH-1'b1 : 0]       O_R_data,   //写FIFO的写数据
+input  wire                                 I_R_rclk,	//鍐橣IFO鐨勫啓鏃堕挓
+input  wire                                 I_R_FS,     //甯у悓姝ヤ俊鍙?
+input  wire                                 I_R_rden,   //鍐橣IFO鐨勫啓浣胯兘
+output wire    [R_DATAWIDTH-1'b1 : 0]       O_R_data,   //鍐橣IFO鐨勫啓鏁版嵁
 
 //----------fdma signals read-------  
-output wire    [APP_ADDR_WIDTH-1'b1: 0]     O_fdma_raddr,	//FDMA写通道地址
-output wire                                 O_fdma_rareq, //FDMA写通道请求
-output wire    [15: 0]                      O_fdma_rsize, //FDMA写通道一次FDMA的传输大小                                         
-input  wire                                 I_fdma_rbusy,	//FDMA处于BUSY状态，SDRAM正在写操作		
-input  wire    [APP_DATA_WIDTH-1'b1:0]      I_fdma_rdata, //FDMA写数据
-input  wire                                 I_fdma_rvalid,//FDMA 写有效
-output wire                                 O_fdma_rready//FDMA写准备好，用户可以写数据	
+output wire    [APP_ADDR_WIDTH-1'b1: 0]     O_fdma_raddr,	//FDMA鍐欓€氶亾鍦板潃
+output wire                                 O_fdma_rareq, //FDMA鍐欓€氶亾璇锋眰
+output wire    [15: 0]                      O_fdma_rsize, //FDMA鍐欓€氶亾涓€娆DMA鐨勪紶杈撳ぇ灏?                                        
+input  wire                                 I_fdma_rbusy,	//FDMA澶勪簬BUSY鐘舵€侊紝SDRAM姝ｅ湪鍐欐搷浣?	
+input  wire    [APP_DATA_WIDTH-1'b1:0]      I_fdma_rdata, //FDMA鍐欐暟鎹?
+input  wire                                 I_fdma_rvalid,//FDMA 鍐欐湁鏁?
+output wire                                 O_fdma_rready//FDMA鍐欏噯澶囧ソ锛岀敤鎴峰彲浠ュ啓鏁版嵁	
 
 );    
 
-// 计算Log2
+// 璁＄畻Log2
 function integer clog2;
   input integer value;
   begin
@@ -94,17 +94,17 @@ localparam W_DATA2 = 'd3;
 localparam R_DATA1 = 'd4; 
 localparam R_DATA2 = 'd5;
 
-localparam WFIFO_ADDR_WIDTH_W   = 	clog2(W_BUFDEPTH);//计算写FIFO的写深度位宽
-localparam WFIFO_ADDR_WIDTH_R   = 	clog2(W_BUFDEPTH * W_DATAWIDTH / APP_DATA_WIDTH);//计算写FIFO的读深度位宽
+localparam WFIFO_ADDR_WIDTH_W   = 	clog2(W_BUFDEPTH);//璁＄畻鍐橣IFO鐨勫啓娣卞害浣嶅
+localparam WFIFO_ADDR_WIDTH_R   = 	clog2(W_BUFDEPTH * W_DATAWIDTH / APP_DATA_WIDTH);//璁＄畻鍐橣IFO鐨勮娣卞害浣嶅
 
-localparam RFIFO_ADDR_WIDTH_W   = 	clog2(R_BUFDEPTH * R_DATAWIDTH / APP_DATA_WIDTH);//计算读FIFO的写深度位宽
-localparam RFIFO_ADDR_WIDTH_R   = 	clog2(R_BUFDEPTH);//计算读FIFO的读深度位宽
+localparam RFIFO_ADDR_WIDTH_W   = 	clog2(R_BUFDEPTH * R_DATAWIDTH / APP_DATA_WIDTH);//璁＄畻璇籉IFO鐨勫啓娣卞害浣嶅
+localparam RFIFO_ADDR_WIDTH_R   = 	clog2(R_BUFDEPTH);//璁＄畻璇籉IFO鐨勮娣卞害浣嶅
 
-localparam WX_BURST_ADDR_INC 	=   (W_XSIZE*W_DATAWIDTH)/APP_DATA_WIDTH;//计算写通道缓存一行需要的地址空间
-localparam RX_BURST_ADDR_INC 	=   (R_XSIZE*R_DATAWIDTH)/APP_DATA_WIDTH;//计算读通道读取一行需要的地址空间
+localparam WX_BURST_ADDR_INC 	=   (W_XSIZE*W_DATAWIDTH)/APP_DATA_WIDTH;//璁＄畻鍐欓€氶亾缂撳瓨涓€琛岄渶瑕佺殑鍦板潃绌洪棿
+localparam RX_BURST_ADDR_INC 	=   (R_XSIZE*R_DATAWIDTH)/APP_DATA_WIDTH;//璁＄畻璇婚€氶亾璇诲彇涓€琛岄渶瑕佺殑鍦板潃绌洪棿
 
-localparam WY_BURST_TIMES 		=   (W_XSIZE*(W_YSIZE-1)*W_DATAWIDTH)/APP_DATA_WIDTH;//计算写通道缓存一帧需要的地址空间
-localparam RY_BURST_TIMES 		=   (R_XSIZE*(R_YSIZE-1)*R_DATAWIDTH)/APP_DATA_WIDTH;//计算读通道读取一行需要的地址空间
+localparam WY_BURST_TIMES 		=   (W_XSIZE*(W_YSIZE-1)*W_DATAWIDTH)/APP_DATA_WIDTH;//璁＄畻鍐欓€氶亾缂撳瓨涓€甯ч渶瑕佺殑鍦板潃绌洪棿
+localparam RY_BURST_TIMES 		=   (R_XSIZE*(R_YSIZE-1)*R_DATAWIDTH)/APP_DATA_WIDTH;//璁＄畻璇婚€氶亾璇诲彇涓€琛岄渶瑕佺殑鍦板潃绌洪棿
 
 wire 							W_FS;
 wire 							R_FS;
@@ -146,22 +146,22 @@ reg 							fdma_rareq_r;
 reg [17: 0]						fdma_raddr_r;
 
 
-assign wrst = (wrst_cnt < 60);//复位写FIFO_60个周期
-assign rrst = (rrst_cnt < 60);//复位写FIFO_60个周期
+assign wrst = (wrst_cnt < 60);//澶嶄綅鍐橣IFO_60涓懆鏈?
+assign rrst = (rrst_cnt < 60);//澶嶄綅鍐橣IFO_60涓懆鏈?
 
 assign O_fdma_wready = 1'b1;
 assign O_fdma_rready = 1'b1;
 
-assign O_fdma_wareq = fdma_wareq_r;//FDMA写请求
-assign O_fdma_wsize = WX_BURST_ADDR_INC;//FDMA一次写操作的地址空间
-assign O_fdma_waddr = W_BASEADDR + {fdma_wbufn[2:0],fdma_waddr_r[17:0]};//FDMA写地址
+assign O_fdma_wareq = fdma_wareq_r;//FDMA鍐欒姹?
+assign O_fdma_wsize = WX_BURST_ADDR_INC;//FDMA涓€娆″啓鎿嶄綔鐨勫湴鍧€绌洪棿
+assign O_fdma_waddr = W_BASEADDR + {fdma_wbufn[2:0],fdma_waddr_r[17:0]};//FDMA鍐欏湴鍧€
 
-assign O_fdma_rareq = fdma_rareq_r;//FDMA读请求
-assign O_fdma_rsize = RX_BURST_ADDR_INC;//FDMA一次读操作的地址空间
-assign O_fdma_raddr = R_BASEADDR + {fdma_rbufn[2:0],fdma_raddr_r[17:0]};//FDMA读地址
+assign O_fdma_rareq = fdma_rareq_r;//FDMA璇昏姹?
+assign O_fdma_rsize = RX_BURST_ADDR_INC;//FDMA涓€娆¤鎿嶄綔鐨勫湴鍧€绌洪棿
+assign O_fdma_raddr = R_BASEADDR + {fdma_rbufn[2:0],fdma_raddr_r[17:0]};//FDMA璇诲湴鍧€
 
 
-//复位写FIFO,进行写帧同步
+//澶嶄綅鍐橣IFO,杩涜鍐欏抚鍚屾
 always@(posedge I_ui_clk)begin
 	if(~I_ui_rstn)begin
 		wrst_cnt  <= 6'd0;
@@ -180,7 +180,7 @@ end
 always@(posedge I_ui_clk)wrst_r1 <= wrst;
 
 
-//复位读FIFO,进行读帧同步
+//澶嶄綅璇籉IFO,杩涜璇诲抚鍚屾
 always@(posedge I_ui_clk)begin
 	if(~I_ui_rstn)begin
 		rrst_cnt  <= 6'd0;
@@ -199,7 +199,7 @@ end
 always@(posedge I_ui_clk)rrst_r1 <= rrst;
 
 
-//写FIFO缓存超过两行,FDMA发送写请求
+//鍐橣IFO缂撳瓨瓒呰繃涓よ,FDMA鍙戦€佸啓璇锋眰
 always @(posedge I_ui_clk)begin
     W_rcnt_r1 <= W_rcnt;
     W_rcnt_r2 <= W_rcnt_r1;
@@ -208,7 +208,7 @@ end
 always @(posedge I_ui_clk) Wfifo_wreq <= (W_rcnt_r2 > 2*WX_BURST_ADDR_INC - 1'b1);
 
 
-//读FIFO缓存少于两行,FDMA发送读请求
+//璇籉IFO缂撳瓨灏戜簬涓よ,FDMA鍙戦€佽璇锋眰
 always @(posedge I_ui_clk)begin
     R_wcnt_r1 <= R_wcnt;
     R_wcnt_r2 <= R_wcnt_r1;
@@ -231,23 +231,23 @@ always @(posedge I_ui_clk) Rfifo_rreq <= ((R_wcnt_r2 < 2*RX_BURST_ADDR_INC - 1'b
     else begin
       case(STATE)
         TS_IDLE:begin
-			if((~wrst && wrst_r1) || (~rrst && rrst_r1))begin//FIFO复位完成,进行读写判断操作
+			if((~wrst && wrst_r1) || (~rrst && rrst_r1))begin//FIFO澶嶄綅瀹屾垚,杩涜璇诲啓鍒ゆ柇鎿嶄綔
 				fdma_waddr_r <= 'd0;
 				fdma_raddr_r <= 'd0;
 				STATE 		 <= WR_ARBI;
 			end
 		end
 		WR_ARBI:begin
-			if(Wfifo_wreq && !Rfifo_rreq)begin//写FIFO缓存超过两行,发送写请求
+			if(Wfifo_wreq && !Rfifo_rreq)begin//鍐橣IFO缂撳瓨瓒呰繃涓よ,鍙戦€佸啓璇锋眰
 				STATE	<= W_DATA1;
 				wr_flag <= 1'b0;
 			end
-			else if(Rfifo_rreq && !Wfifo_wreq)begin//读FIFO缓存少于两行,发送读请求
+			else if(Rfifo_rreq && !Wfifo_wreq)begin//璇籉IFO缂撳瓨灏戜簬涓よ,鍙戦€佽璇锋眰
 				STATE 	<= R_DATA1;
 				wr_flag <= 1'b1;
 			end
-			else if(Wfifo_wreq && Rfifo_rreq)begin//读写同时到来,进行读写仲裁
-				wr_flag <= ~wr_flag;//如果上一次发送的是写请求,本次就发送读请求,反之发送写请求
+			else if(Wfifo_wreq && Rfifo_rreq)begin//璇诲啓鍚屾椂鍒版潵,杩涜璇诲啓浠茶
+				wr_flag <= ~wr_flag;//濡傛灉涓婁竴娆″彂閫佺殑鏄啓璇锋眰,鏈灏卞彂閫佽璇锋眰,鍙嶄箣鍙戦€佸啓璇锋眰
 					if(wr_flag)
 						STATE <= R_DATA1;
 					else
@@ -255,7 +255,7 @@ always @(posedge I_ui_clk) Rfifo_rreq <= ((R_wcnt_r2 < 2*RX_BURST_ADDR_INC - 1'b
 				end
 		end
 		W_DATA1:begin 
-			if(!I_sdr_busy && !I_fdma_wbusy)//当FDMA写不忙并且SDRAM总线不忙时,发送写请求
+			if(!I_sdr_busy && !I_fdma_wbusy)//褰揊DMA鍐欎笉蹇欏苟涓擲DRAM鎬荤嚎涓嶅繖鏃?鍙戦€佸啓璇锋眰
 				fdma_wareq_r  <= 1'b1;
 			else if(I_fdma_wbusy)begin
 				fdma_wareq_r  <= 1'b0;
@@ -264,7 +264,7 @@ always @(posedge I_ui_clk) Rfifo_rreq <= ((R_wcnt_r2 < 2*RX_BURST_ADDR_INC - 1'b
         end
         W_DATA2:begin 
 			if(!I_sdr_busy && !I_fdma_wbusy)begin
-				if(fdma_waddr_r == WY_BURST_TIMES)begin//写完一帧,写地址进行复位,并进行帧缓存
+				if(fdma_waddr_r == WY_BURST_TIMES)begin//鍐欏畬涓€甯?鍐欏湴鍧€杩涜澶嶄綅,骞惰繘琛屽抚缂撳瓨
 						fdma_waddr_r   <= 'd0;
 						STATE 		   <= WR_ARBI;
 						if((fdma_wbufn == W_BUFSIZE - 1'b1 && fdma_rbufn == 0) || fdma_wbufn + 1 ==fdma_rbufn)
@@ -281,7 +281,7 @@ always @(posedge I_ui_clk) Rfifo_rreq <= ((R_wcnt_r2 < 2*RX_BURST_ADDR_INC - 1'b
 			end
         end	
 		R_DATA1:begin 
-			if(!I_sdr_busy && !I_fdma_rbusy)//当FDMA读不忙并且SDRAM总线不忙时,发送读请求
+			if(!I_sdr_busy && !I_fdma_rbusy)//褰揊DMA璇讳笉蹇欏苟涓擲DRAM鎬荤嚎涓嶅繖鏃?鍙戦€佽璇锋眰
 				fdma_rareq_r <= 1'b1;
 			else if(I_fdma_rbusy)begin
 				fdma_rareq_r <= 1'b0;
@@ -290,7 +290,7 @@ always @(posedge I_ui_clk) Rfifo_rreq <= ((R_wcnt_r2 < 2*RX_BURST_ADDR_INC - 1'b
         end
         R_DATA2:begin 
 			if(!I_sdr_busy && !I_fdma_rbusy)
-				if(fdma_raddr_r == RY_BURST_TIMES)begin//读完一帧,读地址进行复位,读取下一帧地址空间
+				if(fdma_raddr_r == RY_BURST_TIMES)begin//璇诲畬涓€甯?璇诲湴鍧€杩涜澶嶄綅,璇诲彇涓嬩竴甯у湴鍧€绌洪棿
 					fdma_raddr_r   <= 'd0;
 					STATE 		   <= WR_ARBI;
 					if((fdma_rbufn == R_BUFSIZE - 1'b1) && (fdma_wbufn == 1'b0) || (fdma_rbufn + 1'b1 == fdma_wbufn))
@@ -310,7 +310,7 @@ always @(posedge I_ui_clk) Rfifo_rreq <= ((R_wcnt_r2 < 2*RX_BURST_ADDR_INC - 1'b
    end
 end 
 
-//写帧同步
+//鍐欏抚鍚屾
 fs_cap fs_cap_W0
 (
  .clk_i(I_W_wclk),
@@ -319,7 +319,7 @@ fs_cap fs_cap_W0
  .fs_cap_o(W_FS)
 );
 
-//读帧同步
+//璇诲抚鍚屾
 fs_cap fs_cap_R0
 (
  .clk_i(I_R_rclk),
@@ -328,7 +328,7 @@ fs_cap fs_cap_R0
  .fs_cap_o(R_FS)
 );
 
-//写FIFO
+//鍐橣IFO
 wfifo #(
 	.DATA_WIDTH_W  (W_DATAWIDTH), 
     .DATA_WIDTH_R  (APP_DATA_WIDTH), 
@@ -353,7 +353,7 @@ wfifo_inst(
 ); 
 
 wire valid;//synthesis keep
-//读FIFO
+//璇籉IFO
 rfifo #(
 	.DATA_WIDTH_W  (APP_DATA_WIDTH), 
     .DATA_WIDTH_R  (R_DATAWIDTH), 

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Project Version="3" Minor="2" Path="F:/al_data/F01_EG4D20/Fmin01/01_start/02_peripheral_demo/04_iic_rtc">
+<Project Version="3" Minor="2" Path="E:/github/01_MLKPAI-Fmin01/01_start/02_peripheral_demo/04_iic_rtc">
     <Project_Created_Time></Project_Created_Time>
-    <TD_Version>5.6.97693</TD_Version>
+    <TD_Encoding>UTF-8</TD_Encoding>
+    <TD_Version>5.6.170155</TD_Version>
     <Name>fpga_prj</Name>
     <HardWare>
         <Family>EG4</Family>

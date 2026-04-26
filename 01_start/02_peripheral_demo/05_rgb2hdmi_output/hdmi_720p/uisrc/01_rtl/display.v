@@ -27,19 +27,19 @@
 `timescale 1ns / 1ns
 
 module display(
-input  I_sysclk,//系统时钟输入
-output O_HDMI_CLK_P,//HDMI输出时钟P端
-output O_HDMI_CLK_N,//HDMI输出时钟N端
-output [2:0]O_HDMI_TX_P,//HDMI输出数据P端
-output [2:0]O_HDMI_TX_N //HDMI输出数据N端
+input  I_sysclk,//绯荤粺鏃堕挓杈撳叆
+output O_HDMI_CLK_P,//HDMI杈撳嚭鏃堕挓P绔?
+output O_HDMI_CLK_N,//HDMI杈撳嚭鏃堕挓N绔?
+output [2:0]O_HDMI_TX_P,//HDMI杈撳嚭鏁版嵁P绔?
+output [2:0]O_HDMI_TX_N //HDMI杈撳嚭鏁版嵁N绔?
 );
 
 wire clk_25m; 
-wire vid_rst,vid_clk,vid_vs,vid_hs,vid_de;//vtc vid 相关信号
-wire pclkx1,pclkx5,locked;//HDMI输出需要2个时钟，pclkx1是和内部视频同步的时钟，pclkx5是HDMI IP内部用于产生输出数据和输出时钟
-wire [7 :0]	rgb_r ,rgb_g ,rgb_b;//定义寄存器保存图像的颜色数据
-assign vid_clk = pclkx1;//内部像素时钟
-assign vid_rst = locked;//用PLL的LOCK信号复位
+wire vid_rst,vid_clk,vid_vs,vid_hs,vid_de;//vtc vid 鐩稿叧淇″彿
+wire pclkx1,pclkx5,locked;//HDMI杈撳嚭闇€瑕?涓椂閽燂紝pclkx1鏄拰鍐呴儴瑙嗛鍚屾鐨勬椂閽燂紝pclkx5鏄疕DMI IP鍐呴儴鐢ㄤ簬浜х敓杈撳嚭鏁版嵁鍜岃緭鍑烘椂閽?
+wire [7 :0]	rgb_r ,rgb_g ,rgb_b;//瀹氫箟瀵勫瓨鍣ㄤ繚瀛樺浘鍍忕殑棰滆壊鏁版嵁
+assign vid_clk = pclkx1;//鍐呴儴鍍忕礌鏃堕挓
+assign vid_rst = locked;//鐢≒LL鐨凩OCK淇″彿澶嶄綅
 
 
 reg	[7:0]	rst_cnt=0;	
@@ -51,66 +51,66 @@ begin
 		rst_cnt <= rst_cnt+1'b1;
 end
 
-//PLL时钟管理IP 输出 pclkx1和pclkx5以及locked信号
+//PLL鏃堕挓绠＄悊IP 杈撳嚭 pclkx1鍜宲clkx5浠ュ強locked淇″彿
 clk_hdmi_pll clk_hdmi_pll_inst(
-.refclk(I_sysclk),//系统时钟输入
+.refclk(I_sysclk),//绯荤粺鏃堕挓杈撳叆
 .reset(!rst_cnt[7]),
 .extlock(locked),//PLL LOCKED
 .clk0_out(clk_25m),
-.clk1_out(pclkx1),//像素时钟
-.clk2_out(pclkx5) //HDMI IO的serdes 时钟 5倍的像素时钟
+.clk1_out(pclkx1),//鍍忕礌鏃堕挓
+.clk2_out(pclkx5) //HDMI IO鐨剆erdes 鏃堕挓 5鍊嶇殑鍍忕礌鏃堕挓
 ); 
 
-//hdmi 输出IP
+//hdmi 杈撳嚭IP
 uihdmitx #
 (
 .FAMILY("EG4")			
 )
 uihdmitx_inst
 (
-.RSTn_i(locked),//异步复位信号，高电平有效
-.HS_i(vid_hs),//RGB输入hs行同步
-.VS_i(vid_vs),//RGB输入vs场同步
-.DE_i(vid_de),//RGB输入de有效
-.RGB_i({rgb_r,rgb_g,rgb_b}), //视频输入数据
-.PCLKX1_i(pclkx1),//像素时钟
-.PCLKX5_i(pclkx5),//串行发送时钟
-.HDMI_CLK_P(O_HDMI_CLK_P),//HDMI时钟通道
+.RSTn_i(locked),//寮傛澶嶄綅淇″彿锛岄珮鐢靛钩鏈夋晥
+.HS_i(vid_hs),//RGB杈撳叆hs琛屽悓姝?
+.VS_i(vid_vs),//RGB杈撳叆vs鍦哄悓姝?
+.DE_i(vid_de),//RGB杈撳叆de鏈夋晥
+.RGB_i({rgb_r,rgb_g,rgb_b}), //瑙嗛杈撳叆鏁版嵁
+.PCLKX1_i(pclkx1),//鍍忕礌鏃堕挓
+.PCLKX5_i(pclkx5),//涓茶鍙戦€佹椂閽?
+.HDMI_CLK_P(O_HDMI_CLK_P),//HDMI鏃堕挓閫氶亾
 //.HDMI_CLK_N(O_HDMI_CLK_N),
-.HDMI_TX_P(O_HDMI_TX_P)//HDMI数据通道
+.HDMI_TX_P(O_HDMI_TX_P)//HDMI鏁版嵁閫氶亾
 //.HDMI_TX_N(O_HDMI_TX_N)
 );
 
 uivtc#
 (
-.H_ActiveSize(1280),          //视频时间参数,行视频信号，一行有效(需要显示的部分)像素所占的时钟数，一个时钟对应一个有效像素
-.H_SyncStart(1280+88),        //视频时间参数,行同步开始，即多少时钟数后开始产生行同步信号 
-.H_SyncEnd(1280+88+44),       //视频时间参数,行同步结束，即多少时钟数后停止产生行同步信号，之后就是行有效数据部分
-.H_FrameSize(1280+88+44+239), //视频时间参数,行视频信号，一行视频信号总计占用的时钟数
-.V_ActiveSize(720),          //视频时间参数,场视频信号，一帧图像所占用的有效(需要显示的部分)行数量，通常说的视频分辨率即H_ActiveSize*V_ActiveSize
-.V_SyncStart(720+4),         //视频时间参数,场同步开始，即多少行数后开始产生场同步信号 
-.V_SyncEnd (720+4+5),        //视频时间参数,场同步结束，多少行后停止产生长同步信号
-.V_FrameSize(720+4+5+28)     //视频时间参数,场视频信号，一帧视频信号总计占用的行数量    
+.H_ActiveSize(1280),          //瑙嗛鏃堕棿鍙傛暟,琛岃棰戜俊鍙凤紝涓€琛屾湁鏁?闇€瑕佹樉绀虹殑閮ㄥ垎)鍍忕礌鎵€鍗犵殑鏃堕挓鏁帮紝涓€涓椂閽熷搴斾竴涓湁鏁堝儚绱?
+.H_SyncStart(1280+88),        //瑙嗛鏃堕棿鍙傛暟,琛屽悓姝ュ紑濮嬶紝鍗冲灏戞椂閽熸暟鍚庡紑濮嬩骇鐢熻鍚屾淇″彿 
+.H_SyncEnd(1280+88+44),       //瑙嗛鏃堕棿鍙傛暟,琛屽悓姝ョ粨鏉燂紝鍗冲灏戞椂閽熸暟鍚庡仠姝骇鐢熻鍚屾淇″彿锛屼箣鍚庡氨鏄鏈夋晥鏁版嵁閮ㄥ垎
+.H_FrameSize(1280+88+44+239), //瑙嗛鏃堕棿鍙傛暟,琛岃棰戜俊鍙凤紝涓€琛岃棰戜俊鍙锋€昏鍗犵敤鐨勬椂閽熸暟
+.V_ActiveSize(720),          //瑙嗛鏃堕棿鍙傛暟,鍦鸿棰戜俊鍙凤紝涓€甯у浘鍍忔墍鍗犵敤鐨勬湁鏁?闇€瑕佹樉绀虹殑閮ㄥ垎)琛屾暟閲忥紝閫氬父璇寸殑瑙嗛鍒嗚鲸鐜囧嵆H_ActiveSize*V_ActiveSize
+.V_SyncStart(720+4),         //瑙嗛鏃堕棿鍙傛暟,鍦哄悓姝ュ紑濮嬶紝鍗冲灏戣鏁板悗寮€濮嬩骇鐢熷満鍚屾淇″彿 
+.V_SyncEnd (720+4+5),        //瑙嗛鏃堕棿鍙傛暟,鍦哄悓姝ョ粨鏉燂紝澶氬皯琛屽悗鍋滄浜х敓闀垮悓姝ヤ俊鍙?
+.V_FrameSize(720+4+5+28)     //瑙嗛鏃堕棿鍙傛暟,鍦鸿棰戜俊鍙凤紝涓€甯ц棰戜俊鍙锋€昏鍗犵敤鐨勮鏁伴噺    
 )
 uivtc_inst
 (
 .I_vtc_rstn(vid_rst),
 .I_vtc_clk(vid_clk),
-.O_vtc_vs(vid_vs),//场同步输出
-.O_vtc_hs(vid_hs),//行同步输出
-.O_vtc_de(vid_de)//视频数据有效
+.O_vtc_vs(vid_vs),//鍦哄悓姝ヨ緭鍑?
+.O_vtc_hs(vid_hs),//琛屽悓姝ヨ緭鍑?
+.O_vtc_de(vid_de)//瑙嗛鏁版嵁鏈夋晥
 );
 
 uitpg uitpg_inst	
 (
-.I_tpg_clk(vid_clk), //系统时钟
-.I_tpg_vs(vid_vs),//图像的vs信号
-.I_tpg_hs(vid_hs),//图像的hs信号 
-.I_tpg_de(vid_de),//de数据有效信号
-.O_tpg_vs(),//和vtc_vs信号一样
-.O_tpg_hs(),//和vtc_hs信号一样
-.O_tpg_de(),//和vtc_de信号一样
-.O_tpg_data({rgb_r,rgb_g,rgb_b})//测试图像数据输出 
+.I_tpg_clk(vid_clk), //绯荤粺鏃堕挓
+.I_tpg_vs(vid_vs),//鍥惧儚鐨剉s淇″彿
+.I_tpg_hs(vid_hs),//鍥惧儚鐨刪s淇″彿 
+.I_tpg_de(vid_de),//de鏁版嵁鏈夋晥淇″彿
+.O_tpg_vs(),//鍜寁tc_vs淇″彿涓€鏍?
+.O_tpg_hs(),//鍜寁tc_hs淇″彿涓€鏍?
+.O_tpg_de(),//鍜寁tc_de淇″彿涓€鏍?
+.O_tpg_data({rgb_r,rgb_g,rgb_b})//娴嬭瘯鍥惧儚鏁版嵁杈撳嚭 
 );
 
 endmodule

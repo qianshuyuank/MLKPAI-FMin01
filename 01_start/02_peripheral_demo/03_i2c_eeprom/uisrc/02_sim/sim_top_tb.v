@@ -32,9 +32,9 @@
 
 module sim_top_tb;
 
-reg  sysclk = 1;//系统时钟输入
-wire iic_scl;// I2C SCL时钟
-wire iic_sda;//I2C SDA数据总线
+reg  sysclk = 1;//绯荤粺鏃堕挓杈撳叆
+wire iic_scl;// I2C SCL鏃堕挓
+wire iic_sda;//I2C SDA鏁版嵁鎬荤嚎
 
 pullup( iic_sda );
 

@@ -107,17 +107,17 @@ assign o_gray_de   = de[1];
 
 
 
-// 红色分量灰度图
+// 绾㈣壊鍒嗛噺鐏板害鍥?
 // assign o_gray_data = {i_r,i_r,i_r};
 // assign o_gray_hsyn	= i_hsyn;
 // assign o_gray_vsyn	= i_vsyn;
 // assign o_gray_de	= i_de;
-//绿色分量灰度图
+//缁胯壊鍒嗛噺鐏板害鍥?
 // assign o_gray_data = {i_g,i_g,i_g};
 // assign o_gray_hsyn	= i_hsyn;
 // assign o_gray_vsyn	= i_vsyn;
 // assign o_gray_de	= i_de;
-//蓝色分量灰度图
+//钃濊壊鍒嗛噺鐏板害鍥?
 // assign o_gray_data = {i_b,i_b,i_b};
 // assign o_gray_hsyn	= i_hsyn;
 // assign o_gray_vsyn	= i_vsyn;

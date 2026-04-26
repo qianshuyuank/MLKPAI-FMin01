@@ -2,8 +2,8 @@
 //////////////////////////////////////////////////////////////////////////////////
 /*
 Company : Liyang Milian Electronic Technology Co., Ltd.
-Brand: Ã×Áª¿Í(msxbo)
-Technical forum£ºuisrc.com
+Brand: ç±³è”å®¢(msxbo)
+Technical forumï¼šuisrc.com
 taobao: osrc.taobao.com
 Create Date: 2019/12/17
 Module Name: uihdmitx.v
@@ -12,7 +12,7 @@ DMI DVI transmit module, support 7 series FPGA and
 ULTRASCALE, ULTRASCALE + FPGA
 Copyright: Copyright (c) msxbo
 Revision: 1.0
-Signal description£º
+Signal descriptionï¼š
 1) _i input
 2) _o output
 3) _n activ low

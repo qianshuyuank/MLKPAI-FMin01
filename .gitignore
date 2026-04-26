@@ -55,6 +55,10 @@ $RECYCLE.BIN/
 
 # ModelSim / QuestaSim simulation work library
 work/
+transcript
+vsim.wlf
+wlft*
+*.wlf
 
 # Xilinx / other tool generated cache
 .cache/

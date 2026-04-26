@@ -82,8 +82,8 @@ module image_template
 	output  reg [7:0]			o_temp_55
 	`endif
 );
-parameter  H_ACTIVE = 640; //图像宽度                              
-parameter  V_ACTIVE = 480;  //图像高度
+parameter  H_ACTIVE = 640; //鍥惧儚瀹藉害                              
+parameter  V_ACTIVE = 480;  //鍥惧儚楂樺害
 
 reg  [10:0]	h_cnt;
 reg  [10:0]	v_cnt;
@@ -111,7 +111,7 @@ wire [7:0]	fifo_4_out;
 `endif
 
 
-//显示区域行计数
+//鏄剧ず鍖哄煙琛岃鏁?
 always@(posedge i_clk or negedge i_rst_n) 
 begin
     if(!i_rst_n)
@@ -127,7 +127,7 @@ begin
     end
 end
 
-//显示区域场计数
+//鏄剧ず鍖哄煙鍦鸿鏁?
 always@(posedge i_clk or negedge i_rst_n) 
 begin
     if(!i_rst_n)

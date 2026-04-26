@@ -110,57 +110,57 @@ begin
 			g_reg <= 0;
 		end
         4'd1:begin
-			r_reg <= 8'b11111111;               //��
+			r_reg <= 8'b11111111;               //锟斤拷
             g_reg <= 8'b11111111;
             b_reg <= 8'b11111111;
 		end
         4'd2,4'd3:begin
-			r_reg <= 8'b11111111;              //��
+			r_reg <= 8'b11111111;              //锟斤拷
             g_reg <= 0;
             b_reg <= 0;  
 		end			  
         4'd4,4'd5:begin
-			r_reg <= 0;                         //��
+			r_reg <= 0;                         //锟斤拷
             g_reg <= 8'b11111111;
             b_reg <= 0; 
 		end					  
         4'd6:begin     
-			r_reg <= 0;                         //�
+			r_reg <= 0;                         //锟?
             g_reg <= 0;
             b_reg <= 8'b11111111;
 		end
         4'd7,4'd8:begin     
-			r_reg <= grid_data;                 //����
+			r_reg <= grid_data;                 //锟斤拷锟斤拷
             g_reg <= grid_data;
             b_reg <= grid_data;
 		end					  
         4'd9:begin    
-			r_reg <= h_cnt[7:0];                //ˮƽ����
+			r_reg <= h_cnt[7:0];                //水平锟斤拷锟斤拷
             g_reg <= h_cnt[7:0];
             b_reg <= h_cnt[7:0];
 		end
         4'd10,4'd11:begin     
-			r_reg <= v_cnt[7:0];                 //��ֱ����
+			r_reg <= v_cnt[7:0];                 //锟斤拷直锟斤拷锟斤拷
             g_reg <= v_cnt[7:0];
             b_reg <= v_cnt[7:0];
 		end
         4'd12:begin     
-			r_reg <= v_cnt[7:0];                 //�촹ֱ����
+			r_reg <= v_cnt[7:0];                 //锟届垂直锟斤拷锟斤拷
             g_reg <= 0;
             b_reg <= 0;
 		end
         4'd13:begin     
-			r_reg <= 0;                          //�̴�ֱ����
+			r_reg <= 0;                          //锟教达拷直锟斤拷锟斤拷
             g_reg <= h_cnt[7:0];
             b_reg <= 0;
 		end
         4'd14:begin     
-			r_reg <= 0;                          //���ֱ����
+			r_reg <= 0;                          //锟斤拷锟街憋拷锟斤拷锟?
             g_reg <= 0;
             b_reg <= h_cnt[7:0];			
 		end
         4'd15:begin     
-			r_reg <= color_bar[23:16];           //����
+			r_reg <= color_bar[23:16];           //锟斤拷锟斤拷
             g_reg <= color_bar[15:8];
             b_reg <= color_bar[7:0];			
 		end				  

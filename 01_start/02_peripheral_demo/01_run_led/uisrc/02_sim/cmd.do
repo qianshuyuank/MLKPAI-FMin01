@@ -1,4 +1,7 @@
 ## part 1: create lib
+if [file exists work] {
+    file delete -force work
+}
 vlib work
 vmap work work
 

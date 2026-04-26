@@ -29,62 +29,50 @@
 
 module uivtc#
 (
-parameter H_ActiveSize  =   1920,               //视频时间参数,行视频信号，一行有效(需要显示的部分)像素所占的时钟数，一个时钟对应一个有效像素
-parameter H_FrameSize   =   1920+88+44+148,     //视频时间参数,行视频信号，一行视频信号总计占用的时钟数
-parameter H_SyncStart   =   1920+88,            //视频时间参数,行同步开始，即多少时钟数后开始产生行同步信号 
-parameter H_SyncEnd     =   1920+88+44,         //视频时间参数,行同步结束，即多少时钟数后停止产生行同步信号，之后就是行有效数据部分
+parameter H_ActiveSize  =   1920,               //瑙嗛鏃堕棿鍙傛暟,琛岃棰戜俊鍙凤紝涓€琛屾湁鏁?闇€瑕佹樉绀虹殑閮ㄥ垎)鍍忕礌鎵€鍗犵殑鏃堕挓鏁帮紝涓€涓椂閽熷搴斾竴涓湁鏁堝儚绱?parameter H_FrameSize   =   1920+88+44+148,     //瑙嗛鏃堕棿鍙傛暟,琛岃棰戜俊鍙凤紝涓€琛岃棰戜俊鍙锋€昏鍗犵敤鐨勬椂閽熸暟
+parameter H_SyncStart   =   1920+88,            //瑙嗛鏃堕棿鍙傛暟,琛屽悓姝ュ紑濮嬶紝鍗冲灏戞椂閽熸暟鍚庡紑濮嬩骇鐢熻鍚屾淇″彿 
+parameter H_SyncEnd     =   1920+88+44,         //瑙嗛鏃堕棿鍙傛暟,琛屽悓姝ョ粨鏉燂紝鍗冲灏戞椂閽熸暟鍚庡仠姝骇鐢熻鍚屾淇″彿锛屼箣鍚庡氨鏄鏈夋晥鏁版嵁閮ㄥ垎
 
-parameter V_ActiveSize  =   1080,               //视频时间参数,场视频信号，一帧图像所占用的有效(需要显示的部分)行数量，通常说的视频分辨率即H_ActiveSize*V_ActiveSize
-parameter V_FrameSize   =   1080+4+5+36,        //视频时间参数,场视频信号，一帧视频信号总计占用的行数量
-parameter V_SyncStart   =   1080+4,             //视频时间参数,场同步开始，即多少行数后开始产生场同步信号 
-parameter V_SyncEnd     =   1080+4+5            //视频时间参数,场同步结束，即多少场数后停止产生场同步信号，之后就是场有效数据部分
-)
+parameter V_ActiveSize  =   1080,               //瑙嗛鏃堕棿鍙傛暟,鍦鸿棰戜俊鍙凤紝涓€甯у浘鍍忔墍鍗犵敤鐨勬湁鏁?闇€瑕佹樉绀虹殑閮ㄥ垎)琛屾暟閲忥紝閫氬父璇寸殑瑙嗛鍒嗚鲸鐜囧嵆H_ActiveSize*V_ActiveSize
+parameter V_FrameSize   =   1080+4+5+36,        //瑙嗛鏃堕棿鍙傛暟,鍦鸿棰戜俊鍙凤紝涓€甯ц棰戜俊鍙锋€昏鍗犵敤鐨勮鏁伴噺
+parameter V_SyncStart   =   1080+4,             //瑙嗛鏃堕棿鍙傛暟,鍦哄悓姝ュ紑濮嬶紝鍗冲灏戣鏁板悗寮€濮嬩骇鐢熷満鍚屾淇″彿 
+parameter V_SyncEnd     =   1080+4+5            //瑙嗛鏃堕棿鍙傛暟,鍦哄悓姝ョ粨鏉燂紝鍗冲灏戝満鏁板悗鍋滄浜х敓鍦哄悓姝ヤ俊鍙凤紝涔嬪悗灏辨槸鍦烘湁鏁堟暟鎹儴鍒?)
 (
-input           I_vtc_rstn,//系统复位
-input			I_vtc_clk,//系统时钟
-output	reg		O_vtc_vs,//场同步输出
-output  reg     O_vtc_hs,//行同步输出
-output  reg     O_vtc_de//视频数据有效 
+input           I_vtc_rstn,//绯荤粺澶嶄綅
+input			I_vtc_clk,//绯荤粺鏃堕挓
+output	reg		O_vtc_vs,//鍦哄悓姝ヨ緭鍑?output  reg     O_vtc_hs,//琛屽悓姝ヨ緭鍑?output  reg     O_vtc_de//瑙嗛鏁版嵁鏈夋晥 
 );
 
-reg [11:0] hcnt = 12'd0;    //视频水平方向，列计数器，寄存器
-reg [11:0] vcnt = 12'd0;    //视频垂直方向，行计数器，寄存器   
-reg [2 :0] rst_cnt = 3'd0;  //复位计数器，寄存器
-wire rst_sync = rst_cnt[2]; //同步复位
+reg [11:0] hcnt = 12'd0;    //瑙嗛姘村钩鏂瑰悜锛屽垪璁℃暟鍣紝瀵勫瓨鍣?reg [11:0] vcnt = 12'd0;    //瑙嗛鍨傜洿鏂瑰悜锛岃璁℃暟鍣紝瀵勫瓨鍣?  
+reg [2 :0] rst_cnt = 3'd0;  //澶嶄綅璁℃暟鍣紝瀵勫瓨鍣?wire rst_sync = rst_cnt[2]; //鍚屾澶嶄綅
 
-//通过计数器产生同步复位
-always @(posedge I_vtc_clk)begin
+//閫氳繃璁℃暟鍣ㄤ骇鐢熷悓姝ュ浣?always @(posedge I_vtc_clk)begin
     if(!I_vtc_rstn)
         rst_cnt <= 3'd0;
     else if(rst_cnt[2] == 1'b0)
         rst_cnt <= rst_cnt + 1'b1;
 end    
 
-//视频水平方向，列计数器
-always @(posedge I_vtc_clk)begin
-    if(rst_sync == 1'b0) //复位
+//瑙嗛姘村钩鏂瑰悜锛屽垪璁℃暟鍣?always @(posedge I_vtc_clk)begin
+    if(rst_sync == 1'b0) //澶嶄綅
         hcnt <= 12'd0;
-    else if(hcnt < (H_FrameSize - 1'b1))//计数范围从0 ~ H_FrameSize-1
+    else if(hcnt < (H_FrameSize - 1'b1))//璁℃暟鑼冨洿浠? ~ H_FrameSize-1
         hcnt <= hcnt + 1'b1;
     else 
         hcnt <= 12'd0;
 end   
 
-//视频垂直方向，行计数器，用于计数已经完成的行视频信号
+//瑙嗛鍨傜洿鏂瑰悜锛岃璁℃暟鍣紝鐢ㄤ簬璁℃暟宸茬粡瀹屾垚鐨勮瑙嗛淇″彿
 always @(posedge I_vtc_clk)begin
     if(rst_sync == 1'b0)
         vcnt <= 12'd0;
-    else if(hcnt == (H_ActiveSize  - 1'b1)) begin//视频水平方向，是否一行结束
-           vcnt <= (vcnt == (V_FrameSize - 1'b1)) ? 12'd0 : vcnt + 1'b1;//视频垂直方向，行计数器加1，计数范围0~V_FrameSize - 1
+    else if(hcnt == (H_ActiveSize  - 1'b1)) begin//瑙嗛姘村钩鏂瑰悜锛屾槸鍚︿竴琛岀粨鏉?           vcnt <= (vcnt == (V_FrameSize - 1'b1)) ? 12'd0 : vcnt + 1'b1;//瑙嗛鍨傜洿鏂瑰悜锛岃璁℃暟鍣ㄥ姞1锛岃鏁拌寖鍥?~V_FrameSize - 1
     end
 end 
 
-wire hs_valid  =  hcnt < H_ActiveSize; //行信号有效像素部分
-wire vs_valid  =  vcnt < V_ActiveSize; //场信号有效像素部分
-wire vtc_hs    =  (hcnt >= H_SyncStart && hcnt < H_SyncEnd);//产生hs，行同步信号
-wire vtc_vs    =  (vcnt > V_SyncStart && vcnt <= V_SyncEnd);//产生vs，场同步信号      
-wire vtc_de    =  hs_valid && vs_valid;//只有当视频水平方向，列有效和视频垂直方向，行同时有效，视频数据部分才是有效
-
+wire hs_valid  =  hcnt < H_ActiveSize; //琛屼俊鍙锋湁鏁堝儚绱犻儴鍒?wire vs_valid  =  vcnt < V_ActiveSize; //鍦轰俊鍙锋湁鏁堝儚绱犻儴鍒?wire vtc_hs    =  (hcnt >= H_SyncStart && hcnt < H_SyncEnd);//浜х敓hs锛岃鍚屾淇″彿
+wire vtc_vs    =  (vcnt > V_SyncStart && vcnt <= V_SyncEnd);//浜х敓vs锛屽満鍚屾淇″彿      
+wire vtc_de    =  hs_valid && vs_valid;//鍙湁褰撹棰戞按骞虫柟鍚戯紝鍒楁湁鏁堝拰瑙嗛鍨傜洿鏂瑰悜锛岃鍚屾椂鏈夋晥锛岃棰戞暟鎹儴鍒嗘墠鏄湁鏁?
 always @(posedge I_vtc_clk)begin
 	if(rst_sync == 1'b0)begin
 		O_vtc_vs <= 1'b0;

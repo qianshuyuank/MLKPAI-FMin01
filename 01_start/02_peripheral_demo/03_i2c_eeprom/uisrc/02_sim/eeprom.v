@@ -55,7 +55,7 @@ parameter r7=8'b10101111,w7=8'b10101110,
 //---------------------------------------------------
 
 assign sda= (out_flag == 1)?sda_buf[7]:1'bz;
-//--------------------寄存器和存储器初始化------------------------------
+//--------------------瀵勫瓨鍣ㄥ拰瀛樺偍鍣ㄥ垵濮嬪寲------------------------------
 initial
 begin
 addr_byte   =0;
@@ -70,7 +70,7 @@ for(i=0;i<=2047;i=i+1)
 memory[i]=0;
 end
 
-//////--------------启动信号检测--------------
+//////--------------鍚姩淇″彿妫€娴?-------------
 always @(negedge sda)
             if(scl == 1)
              begin
@@ -78,7 +78,7 @@ always @(negedge sda)
                 if(State==2'b11)
                  disable write_to_eeprm;
              end                
- /////-------------------主状态机-----------------------
+ /////-------------------涓荤姸鎬佹満-----------------------
 always @(posedge sda)
                 if(scl == 1)
                 stop_W_R;
@@ -106,7 +106,7 @@ always @(posedge sda)
                      end
 
                 
-//--------------操作停止------------------
+//--------------鎿嶄綔鍋滄------------------
 task stop_W_R;
        begin
          
@@ -117,7 +117,7 @@ task stop_W_R;
          sda_buf   =0;
          end
     endtask
-//----------------读进控制字和存储单元地址-------------------
+//----------------璇昏繘鎺у埗瀛楀拰瀛樺偍鍗曞厓鍦板潃-------------------
     task read_in;
     begin
     shift_in(ctrl_byte);
@@ -136,7 +136,7 @@ task stop_W_R;
     endtask
     
     
-    //-------------EEPROM读操作_______________________
+    //-------------EEPROM璇绘搷浣淿______________________
     task read_from_eeprm;
     begin
     shift_in(ctrl_byte);
@@ -151,7 +151,7 @@ task stop_W_R;
     end
     endtask
     
-    // ---SDA 数据线上的数据存入寄存器 ，数据在SCL的高电平有效------------------
+    // ---SDA 鏁版嵁绾夸笂鐨勬暟鎹瓨鍏ュ瘎瀛樺櫒 锛屾暟鎹湪SCL鐨勯珮鐢靛钩鏈夋晥------------------
     task shift_in;
     output[7:0] shift;
     begin
@@ -165,15 +165,15 @@ task stop_W_R;
     @(posedge scl) shift[0]=sda;
     @(negedge scl) //ACK
     begin
-    #`timeslice;//模拟芯片的延迟输出ACK
+    #`timeslice;//妯℃嫙鑺墖鐨勫欢杩熻緭鍑篈CK
     out_flag = 1;
     sda_buf  =0;
     end
-    @(negedge scl)//结束ACK
+    @(negedge scl)//缁撴潫ACK
     #`timeslice out_flag  = 0;
     end
     endtask
-    //----------EEPROM存储器中的数据通过SDA数据线输出，数据在SCL低电平时变化
+    //----------EEPROM瀛樺偍鍣ㄤ腑鐨勬暟鎹€氳繃SDA鏁版嵁绾胯緭鍑猴紝鏁版嵁鍦⊿CL浣庣數骞虫椂鍙樺寲
    task shift_out;
     begin
     out_flag= 1;

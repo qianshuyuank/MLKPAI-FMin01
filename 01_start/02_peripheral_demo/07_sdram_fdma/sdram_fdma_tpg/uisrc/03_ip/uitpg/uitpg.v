@@ -30,14 +30,14 @@
 module uitpg
 (
 
-input           I_tpg_clk, //系统时钟
-input           I_tpg_vs,  //场同步输入
-input           I_tpg_hs,  //行同步输入
-input           I_tpg_de,  //视频数据有效输入   
-output          O_tpg_vs,  //场同步输出
-output          O_tpg_hs,  //行同步输出
-output          O_tpg_de,  //视频数据有效输出    
-output [23:0]   O_tpg_data //有效测试数据
+input           I_tpg_clk, //绯荤粺鏃堕挓
+input           I_tpg_vs,  //鍦哄悓姝ヨ緭鍏?
+input           I_tpg_hs,  //琛屽悓姝ヨ緭鍏?
+input           I_tpg_de,  //瑙嗛鏁版嵁鏈夋晥杈撳叆   
+output          O_tpg_vs,  //鍦哄悓姝ヨ緭鍑?
+output          O_tpg_hs,  //琛屽悓姝ヨ緭鍑?
+output          O_tpg_de,  //瑙嗛鏁版嵁鏈夋晥杈撳嚭    
+output [23:0]   O_tpg_data //鏈夋晥娴嬭瘯鏁版嵁
 );
 
 reg[8:0] fcnt = 9'd0;
@@ -45,23 +45,23 @@ reg tpg_vs_r = 1'b0;
 reg tpg_hs_r = 1'b0;
 
 always @(posedge I_tpg_clk)begin
-    tpg_vs_r <= I_tpg_vs;//对vs信号寄存一次
-    tpg_hs_r <= I_tpg_hs;//对hs信号寄存一次
+    tpg_vs_r <= I_tpg_vs;//瀵箆s淇″彿瀵勫瓨涓€娆?
+    tpg_hs_r <= I_tpg_hs;//瀵筯s淇″彿瀵勫瓨涓€娆?
 end
 
-reg [11:0]v_cnt = 12'd0; //视频垂直方向，行计数器
-reg [11:0]h_cnt = 12'd0; //视频水平方向，列计数器
+reg [11:0]v_cnt = 12'd0; //瑙嗛鍨傜洿鏂瑰悜锛岃璁℃暟鍣?
+reg [11:0]h_cnt = 12'd0; //瑙嗛姘村钩鏂瑰悜锛屽垪璁℃暟鍣?
 
-//v_cnt计数器模块
+//v_cnt璁℃暟鍣ㄦā鍧?
 always @(posedge I_tpg_clk)
-  if(I_tpg_vs) //通过vs产生同步复位
-	v_cnt <= 12'd0; //重置v_cnt=0
+  if(I_tpg_vs) //閫氳繃vs浜х敓鍚屾澶嶄綅
+	v_cnt <= 12'd0; //閲嶇疆v_cnt=0
   else if((!tpg_hs_r)&&I_tpg_hs) 
-  //hs信号的上升沿，v_cnt计数，这种方式可以不管hs有效是高电平还是低电平的情况,v_cnt 视频垂直方向，行计数器，计数行数量
+  //hs淇″彿鐨勪笂鍗囨部锛寁_cnt璁℃暟锛岃繖绉嶆柟寮忓彲浠ヤ笉绠s鏈夋晥鏄珮鐢靛钩杩樻槸浣庣數骞崇殑鎯呭喌,v_cnt 瑙嗛鍨傜洿鏂瑰悜锛岃璁℃暟鍣紝璁℃暟琛屾暟閲?
 	v_cnt <= v_cnt + 1'b1; 
 
-//h_cnt计数器模块	
-//计数行有效像素,当de无效，重置 h_cnt=0
+//h_cnt璁℃暟鍣ㄦā鍧?
+//璁℃暟琛屾湁鏁堝儚绱?褰揹e鏃犳晥锛岄噸缃?h_cnt=0
 always @(posedge I_tpg_clk)
   if(I_tpg_de)
 	h_cnt <= h_cnt + 1'b1; 
@@ -70,10 +70,10 @@ always @(posedge I_tpg_clk)
       
 reg [7:0] grid_data = 8'd0;
 
-//grid_data发生器  
+//grid_data鍙戠敓鍣? 
 always @(posedge I_tpg_clk)begin
 	if((v_cnt[4]==1'b1) ^ (h_cnt[4]==1'b1))
-	//方格大小16*16，黑白交替
+	//鏂规牸澶у皬16*16锛岄粦鐧戒氦鏇?
 	   grid_data <= 8'h00;
 	else
 	   grid_data <= 8'hff;
@@ -81,32 +81,32 @@ end
 
 reg[23:0]color_bar = 24'd0;
 
-//RGB彩条发生器
+//RGB褰╂潯鍙戠敓鍣?
 always @(posedge I_tpg_clk)
 begin
 	if(h_cnt==80)
-	color_bar	<=	24'hff0000;//红
+	color_bar	<=	24'hff0000;//绾?
 	else if(h_cnt==160)
-	color_bar	<=	24'h00ff00;//绿
+	color_bar	<=	24'h00ff00;//缁?
 	else if(h_cnt==240)
-	color_bar	<=	24'h0000ff;//蓝
+	color_bar	<=	24'h0000ff;//钃?
 	else if(h_cnt==320)
-	color_bar	<=	24'hff00ff;//紫
+	color_bar	<=	24'hff00ff;//绱?
 	else if(h_cnt==400)
-	color_bar	<=	24'hffff00;//黄
+	color_bar	<=	24'hffff00;//榛?
 	else if(h_cnt==480)
-	color_bar	<=	24'h00ffff;//青蓝
+	color_bar	<=	24'h00ffff;//闈掕摑
 	else if(h_cnt==560)
-	color_bar	<=	24'hffffff;//白
+	color_bar	<=	24'hffffff;//鐧?
 	else if(h_cnt==640)
-	color_bar	<=	24'h000000;//黑
+	color_bar	<=	24'h000000;//榛?
 	else
 	color_bar	<=	color_bar;
 end
 
 reg[10:0]dis_mode = 10'd0;
 
-//显示模式切换
+//鏄剧ず妯″紡鍒囨崲
 always @(posedge I_tpg_clk)
     if((!tpg_vs_r)&&I_tpg_vs) dis_mode <= dis_mode + 1'b1;
 
@@ -114,76 +114,76 @@ reg[7:0]  r_reg = 8'd0;
 reg[7:0]  g_reg = 8'd0;
 reg[7:0]  b_reg = 8'd0;
 
-//测试图形输出
+//娴嬭瘯鍥惧舰杈撳嚭
 always @(posedge I_tpg_clk)
 begin
-    case(dis_mode[10:7])//截取高位，控制切换显示速度
+    case(dis_mode[10:7])//鎴彇楂樹綅锛屾帶鍒跺垏鎹㈡樉绀洪€熷害
         4'd0:begin
 			r_reg <= 0; 
 			b_reg <= 0;
 			g_reg <= 0;
 		end
         4'd1:begin
-			r_reg <= 8'b11111111;               //白
+			r_reg <= 8'b11111111;               //鐧?
             g_reg <= 8'b11111111;
             b_reg <= 8'b11111111;
 		end
-        4'd2,4'd3:begin  //连续两个状态输出相同图形
-			r_reg <= 8'b11111111;              //红
+        4'd2,4'd3:begin  //杩炵画涓や釜鐘舵€佽緭鍑虹浉鍚屽浘褰?
+			r_reg <= 8'b11111111;              //绾?
             g_reg <= 0;
             b_reg <= 0;  
 		end			  
-        4'd4,4'd5:begin  //连续两个状态输出相同图形
-			r_reg <= 0;                         //绿
+        4'd4,4'd5:begin  //杩炵画涓や釜鐘舵€佽緭鍑虹浉鍚屽浘褰?
+			r_reg <= 0;                         //缁?
             g_reg <= 8'b11111111;
             b_reg <= 0; 
 		end					  
         4'd6:begin     
-			r_reg <= 0;                         //蓝
+			r_reg <= 0;                         //钃?
             g_reg <= 0;
             b_reg <= 8'b11111111;
 		end
-        4'd7,4'd8:begin  //连续两个状态输出相同图形
-			r_reg <= grid_data;                 //方格
+        4'd7,4'd8:begin  //杩炵画涓や釜鐘舵€佽緭鍑虹浉鍚屽浘褰?
+			r_reg <= grid_data;                 //鏂规牸
             g_reg <= grid_data;
             b_reg <= grid_data;
 		end					  
         4'd9:begin    
-			r_reg <= h_cnt[7:0];                //水平渐变
+			r_reg <= h_cnt[7:0];                //姘村钩娓愬彉
             g_reg <= h_cnt[7:0];
             b_reg <= h_cnt[7:0];
 		end
-        4'd10,4'd11:begin   //连续两个状态输出相同图形  
-			r_reg <= v_cnt[7:0];                 //垂直渐变
+        4'd10,4'd11:begin   //杩炵画涓や釜鐘舵€佽緭鍑虹浉鍚屽浘褰? 
+			r_reg <= v_cnt[7:0];                 //鍨傜洿娓愬彉
             g_reg <= v_cnt[7:0];
             b_reg <= v_cnt[7:0];
 		end
         4'd12:begin     
-			r_reg <= v_cnt[7:0];                 //红垂直渐变
+			r_reg <= v_cnt[7:0];                 //绾㈠瀭鐩存笎鍙?
             g_reg <= 0;
             b_reg <= 0;
 		end
         4'd13:begin     
-			r_reg <= 0;                          //绿垂直渐变
+			r_reg <= 0;                          //缁垮瀭鐩存笎鍙?
             g_reg <= h_cnt[7:0];
             b_reg <= 0;
 		end
         4'd14:begin     
-			r_reg <= 0;                          //蓝垂直渐变
+			r_reg <= 0;                          //钃濆瀭鐩存笎鍙?
             g_reg <= 0;
             b_reg <= h_cnt[7:0];			
 		end
         4'd15:begin     
-			r_reg <= color_bar[23:16];           //彩条
+			r_reg <= color_bar[23:16];           //褰╂潯
             g_reg <= color_bar[15:8];
             b_reg <= color_bar[7:0];			
 		end				  
         endcase
 end
 
-assign O_tpg_data = {r_reg,g_reg,b_reg};//测试图形RGB数据输出
-assign O_tpg_vs = I_tpg_vs;  //VS同步信号
-assign O_tpg_hs = I_tpg_hs;  //HS同步信号
-assign O_tpg_de = I_tpg_de;  //DE数据有效信号
+assign O_tpg_data = {r_reg,g_reg,b_reg};//娴嬭瘯鍥惧舰RGB鏁版嵁杈撳嚭
+assign O_tpg_vs = I_tpg_vs;  //VS鍚屾淇″彿
+assign O_tpg_hs = I_tpg_hs;  //HS鍚屾淇″彿
+assign O_tpg_de = I_tpg_de;  //DE鏁版嵁鏈夋晥淇″彿
 
 endmodule

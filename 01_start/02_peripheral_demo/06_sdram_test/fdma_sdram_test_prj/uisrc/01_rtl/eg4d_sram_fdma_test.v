@@ -39,7 +39,7 @@ module eg4d_sram_fdma_test#
 (
 parameter  integer TEST_MEM_SIZE  	   	 = 32'd640*480,
 parameter  integer TEST_MEN_ADDR_OFFSET  = 16'd0,
-parameter  integer FDMA_BURST_LEN        = 16'd640//4的整数倍
+parameter  integer FDMA_BURST_LEN        = 16'd640//4鐨勬暣鏁板€?
 )
 (
 input 						I_sys_clk	,

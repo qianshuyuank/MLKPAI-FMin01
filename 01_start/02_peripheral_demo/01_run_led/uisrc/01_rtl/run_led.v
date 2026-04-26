@@ -29,7 +29,7 @@
 
 module run_led#
 (
-parameter T_INR_CNT_SET = 62'd24_999_999
+parameter T_INR_CNT_SET = 62'd24_999_99//9
 )
 (
  input  		I_sysclk,
